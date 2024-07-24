@@ -2,33 +2,14 @@
 
 namespace NW\WebService\References\Operations\Notification;
 
-/**
- * @property Seller $Seller
- */
-class Contractor
+abstract class ReferencesOperation
 {
-    const TYPE_CUSTOMER = 0;
-    public $id;
-    public $type;
-    public $name;
+    abstract public function doOperation(): array;
 
-    public static function getById(int $resellerId): self
+    public function getRequest($pName)
     {
-        return new self($resellerId); // fakes the getById method
+        return $_REQUEST[$pName];
     }
-
-    public function getFullName(): string
-    {
-        return $this->name . ' ' . $this->id;
-    }
-}
-
-class Seller extends Contractor
-{
-}
-
-class Employee extends Contractor
-{
 }
 
 class Status
@@ -42,34 +23,24 @@ class Status
             1 => 'Pending',
             2 => 'Rejected',
         ];
-
         return $a[$id];
     }
 }
 
-abstract class ReferencesOperation
+class MessagesClient
 {
-    abstract public function doOperation(): array;
-
-    public function getRequest($pName)
+    public static function sendMessage($emailFrom, $emailTo, $subject, $message): bool
     {
-        return $_REQUEST[$pName];
+        // TODO в зависимости от ответа почтового сервера
+        return true;
     }
 }
 
-function getResellerEmailFrom()
+class NotificationManager
 {
-    return 'contractor@example.com';
-}
-
-function getEmailsByPermit($resellerId, $event)
-{
-    // fakes the method
-    return ['someemeil@example.com', 'someemeil2@example.com'];
-}
-
-class NotificationEvents
-{
-    const CHANGE_RETURN_STATUS = 'changeReturnStatus';
-    const NEW_RETURN_STATUS    = 'newReturnStatus';
+    public static function sendSms($phone_number, $message): bool
+    {
+        // TODO в зависимости от ответа sms провайдера
+        return true;
+    }
 }
